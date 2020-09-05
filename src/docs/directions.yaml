@@ -1,0 +1,128 @@
+paths:
+  /directions:
+    get:
+      tags:
+        - "directions"
+      summary:  GET duration, number of transfers and an array of sections for required destination
+      parameters:
+        - $ref: "#/components/parameters/from"
+        - $ref: "#/components/parameters/to"
+        - $ref: "#/components/parameters/limit"
+        - $ref: "#/components/parameters/arrivalTime"
+      responses:
+        "200":
+          description: Return a list of connections
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Connection"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+# SECTION: COMPONENTS
+components:
+  parameters:
+    from:
+      required: true
+      name: from
+      in: query
+      schema:
+        type: string
+    to:
+      required: true
+      name: to
+      in: query
+      schema:
+        type: string
+    limit:
+      name: limit
+      in: query
+      schema:
+        type: number
+    arrivalTime:
+      name: arrivalTime
+      in: query
+      schema:
+        type: string
+  # RESPONSE TYPES
+  responses:
+    NotFound:
+      description: Entity not found.
+    BadRequest:
+      description: Required parameters are not provided.
+  # SECTION MODELS
+  schemas:
+    Connection:
+      type: object
+      properties:
+        duration:
+          type: string
+        transfers:
+          type: number
+        sections:
+          type: array
+          items:
+            $ref: "#/components/schemas/Section"
+    Section:
+      type: object
+      properties:
+        journey:
+          $ref: "#/components/schemas/Journey"
+          description: A journey, the transportation used by this section. Can be null.
+        walk:
+          type: object
+          properties:
+            duration:
+              type: string
+          description: A walking duration. Can be null.
+        departure:
+          $ref: "#/components/schemas/Departure"
+        arrival:
+          $ref: "#/components/schemas/Arrival"
+    Journey:
+      type: object
+      properties:
+        name:
+          type: string
+        category:
+          type: string
+        passList:
+          type: array
+          items:
+            type: object
+            properties:
+              station:
+                type: object
+                properties:
+                  name:
+                    type: string
+              arrival:
+                type: string
+                format: date-time
+    Departure:
+      type: object
+      properties:
+        departure:
+          type: string
+          format: date-time
+          description: Time of departure from station.
+        station:
+          type: object
+          properties:
+            name:
+              type: string
+              description: Name of departure station.
+    Arrival:
+      type: object
+      properties:
+        arrival:
+          type: string
+          format: date-time
+          description: Time of arrival to station.
+        station:
+          type: object
+          properties:
+            name:
+              type: string
+              description: Name of arrival station.
