@@ -103,6 +103,9 @@ components:
     Departure:
       type: object
       properties:
+        arrival:
+          type: string
+          format: date-time
         departure:
           type: string
           format: date-time

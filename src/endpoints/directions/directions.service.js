@@ -9,6 +9,7 @@ const createResponseFields = () => {
     'connections/transfers',
     'connections/sections/walk',
     'connections/sections/departure/departure',
+    'connections/sections/departure/arrival',
     'connections/sections/departure/station/name',
     'connections/sections/arrival/arrival',
     'connections/sections/arrival/station/name',
